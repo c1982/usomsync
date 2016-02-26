@@ -1,5 +1,9 @@
 package main
 
+import (
+	"strings"
+)
+
 type Rss struct {
 	RssChannel Channel `xml:"channel"`
 }
@@ -17,4 +21,31 @@ type Item struct {
 	Link        string `xml:"link"`
 	PubDate     string `xml:"pubDate"`
 	Description string `xml:"description"`
+}
+
+func (r *Rss) ToIPList() []string {
+
+	list := []string{}
+
+	for _, item := range r.RssChannel.Items {
+		if isValidIp(item.Link) {
+			list = append(list, item.Link)
+		}
+	}
+
+	return list
+}
+
+func (r *Rss) ToDomainList() []string {
+	list := []string{}
+
+	for _, item := range r.RssChannel.Items {
+		if !isValidIp(item.Link) {
+			if !strings.HasSuffix(item.Link, "http://") {
+				list = append(list, item.Link)
+			}
+		}
+	}
+
+	return list
 }

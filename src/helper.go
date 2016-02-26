@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"os"
 )
@@ -46,38 +47,50 @@ func DeserializeXml(xmlData string) (rss Rss) {
 }
 
 //SaveSpammerIPs save ipaddr list to SPAMMERIPBLOCKS file
-func SaveSpammerIPs(ipaddr []string) (err error) {
+func SaveSpammerIPs(ipaddr []string, file string) (err error) {
 
-	lines, err := GetAllLinesFromFile(SPAMMERIPBLOCKS)
+	lines, err := GetAllLinesFromFile(file)
 
 	if err != nil {
 		return err
 	}
 
-	newIps := ClearExistsIpAddr(lines, ipaddr)
-	err = AppendNewLinesToFile(SPAMMERIPBLOCKS, newIps)
+	newIps := ClearExistsItems(lines, ipaddr)
+	err = AppendNewLinesToFile(file, newIps)
 
 	return err
 }
 
-//ClearExistsIpAddr check exists IP or Hostname in spammer file
-func ClearExistsIpAddr(exists []string, newips []string) []string {
+func SaveSpammerHosts(hosts []string, file string) (err error) {
+	lines, err := GetAllLinesFromFile(file)
+
+	if err != nil {
+		return err
+	}
+
+	newDomains := ClearExistsItems(lines, hosts)
+	err = AppendNewLinesToFile(file, newDomains)
+
+	return err
+}
+
+//ClearExistsItems check exists IP or Hostname in spammer file
+func ClearExistsItems(source []string, newitems []string) []string {
 
 	result := []string{}
 	isExists := false
 
-	for i := 0; i <= len(newips)-1; i++ {
-
+	for i := 0; i <= len(newitems)-1; i++ {
 		isExists = false
-		for e := 0; e <= len(exists)-1; e++ {
-			if exists[e] == newips[i] {
+		for e := 0; e <= len(source)-1; e++ {
+			if source[e] == newitems[i] {
 				isExists = true
 				break
 			}
 		}
 
 		if !isExists {
-			result = append(result, newips[i])
+			result = append(result, newitems[i])
 		}
 	}
 
@@ -130,4 +143,9 @@ func AppendNewLinesToFile(filePath string, lines []string) error {
 	}
 
 	return err
+}
+
+func isValidIp(ipaddr string) bool {
+	ip := net.ParseIP(ipaddr)
+	return ip.To4() != nil
 }

@@ -3,29 +3,40 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 )
 
 //#sender_host_reject = +include_unknown:lsearch*;/etc/spammers
 var USOM_URL string
 var SPAMMERIPBLOCKS string
-var SPAMMER string
+var SPAMMERDOMAINS string
 
 func main() {
 
-	USOM_URL := flag.String("url", "https://www.usom.gov.tr/rss/zararli-baglanti.rss", "-url=https://www.usom.gov.tr/rss/zararli-baglanti.rss")
-	SPAMMERIPBLOCKS := flag.String("ipblocks", "/etc/spammeripblocks", "-ipblocks=/etc/spammeripblocks")
-	SPAMMER := flag.String("hostblocks", "/etc/spammer", "-hostblocks=/etc/spammer")
+	flag.StringVar(&USOM_URL, "url", "https://www.usom.gov.tr/rss/zararli-baglanti.rss", "-url=https://www.usom.gov.tr/rss/zararli-baglanti.rss")
+	flag.StringVar(&SPAMMERIPBLOCKS, "ip", "/etc/spammeripblocks", "-ip=/etc/spammeripblocks")
+	flag.StringVar(&SPAMMERDOMAINS, "d", "/etc/blockeddomains", "-d=/etc/blockeddomains")
 
-	rsstext, err := GetXmlData(*USOM_URL)
+	fmt.Println(SPAMMERIPBLOCKS)
+	fmt.Println(SPAMMERDOMAINS)
 
-	if err != nil {
-		panic(err)
-	}
+	fmt.Println("tail:", flag.Args())
+
+	rsstext, err := GetXmlData(USOM_URL)
+	checkError(err)
 
 	rss := DeserializeXml(rsstext)
 
-	fmt.Println(rss.RssChannel.Description)
-	fmt.Println(SPAMMERIPBLOCKS)
-	fmt.Println(SPAMMER)
+	err = SaveSpammerIPs(rss.ToIPList(), SPAMMERIPBLOCKS)
+	checkError(err)
 
+	err = SaveSpammerHosts(rss.ToDomainList(), SPAMMERDOMAINS)
+	checkError(err)
+}
+
+func checkError(err error) {
+	if err != nil {
+		flag.Usage()
+		log.Fatal(err)
+	}
 }

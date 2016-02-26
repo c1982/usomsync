@@ -22,7 +22,7 @@ func TestClearExistsIpAddr(t *testing.T) {
 	spammeripblocks_file := []string{"10.7.7.8", "192.168.5.2", "55.4.3.1", "60.1.1.12", "10.5.5.80"}
 	snom_malware_ips := []string{"10.7.7.8", "10.5.5.80", "4.2.2.1", "4.2.2.7"}
 
-	new_ips_list := ClearExistsIpAddr(spammeripblocks_file, snom_malware_ips)
+	new_ips_list := ClearExistsItems(spammeripblocks_file, snom_malware_ips)
 
 	if len(new_ips_list) != 2 {
 		t.Errorf("new array lenght is %v", len(new_ips_list))
