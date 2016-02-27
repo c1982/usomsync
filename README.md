@@ -1,19 +1,19 @@
 # USOM Zararlı Bağlantı Listesi Exim Blacklist Senkronizasyonu
-Ulusal Siber Olaylara Müdahale Merkezi (USOM) Türkiye özelinde kendi yaptığı çalışmalar neticesinde veya ihbar yolu ile tespit ettiği zararlı (malware) yazılım yayan dağıtan veya oltalama saldırısında (Phising) bulunan IP adreslerini veya Domain isimlerini www.usom.gov.tr üzerinden yayınlamaktadır.
+Ulusal Siber Olaylara Müdahale Merkezi (USOM) Türkiye özelinde kendi yaptığı çalışmalar neticesinde veya ihbar yolu ile tespit ettiği zararlı (malware) yazılım yayan veya oltalama saldırısında (phising) bulunan IP adreslerini ve Domain isimlerini www.usom.gov.tr üzerinden yayınlamaktadır.
 
 USOM Zararlı Bağlantı Listesi [https://www.usom.gov.tr/rss/zararli-baglanti.rss]() adresinde RSS standartlarında XML formatında ayrıca yayınlanmaktadır. 
 
-Bu uygulama USOM'un yayınladığı bu zararlı listesini Exim Mail Sunucusu'nun Domain ve IP Black List dosyası ile eşleştirerek yeni tespit edilmiş olan zararlı yazılımlardan ve Phising saldırılarını korunmanızı sağlar.
+Bu uygulama USOM'un yayınladığı bu zararlı listesini [http://www.exim.org/](Exim Mail Sunucusu) Domain ve IP Black List dosyası ile eşleştirerek yeni tespit edilmiş olan zararlı yazılımlardan ve Phising saldırılarını korunmanızı sağlar.
 
 ## Gereksinimler
-1. Exim Mail Server
+1. Exim Mail Server ([http://www.exim.org/]())
 
 ## Parametreler
--url: USOM Zararlı Bağlantı Listesi'nin web adresini belirleyen parametre. Varsayılan olarak https://www.usom.gov.tr/rss/zararli-baglanti.rss değerini alır.
+**-url:** USOM Zararlı Bağlantı Listesi'nin web adresini belirleyen parametre. Varsayılan olarak https://www.usom.gov.tr/rss/zararli-baglanti.rss değerini alır.
 
--d: Uygulamanın zararlı bulunan host isimlerinin hangi dosyaya kayıtedileceğini belirleyen parametre. Varsayılan olarak /etc/blockeddomains değerini alır.
+**-d:** Uygulamanın zararlı bulunan host isimlerinin hangi dosyaya kayıtedileceğini belirleyen parametre. Varsayılan olarak /etc/blockeddomains değerini alır.
 
--ip: Uygulamanın zararlı bulunan IP Adreslerinin hangi dosyaya kayıtedileceğini belirleyen parametre. Varsayılan olarak /etc/spammeripblocks değerini alır.
+**-ip:** Uygulamanın zararlı bulunan IP Adreslerinin hangi dosyaya kayıtedileceğini belirleyen parametre. Varsayılan olarak /etc/spammeripblocks değerini alır.
 
 ## Kullanım
 `usomsync -url=https://www.usom.gov.tr/rss/zararli-baglanti.rss -d=/etc/blockeddomains -ip=/etc/spammeripblocks`
