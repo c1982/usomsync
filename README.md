@@ -1,4 +1,4 @@
-# USOM Zararlı Bağlantı Listesi Exim Blacklist Senkronizasyonu
+# USOM Zararlı Bağlantı Listesi Exim Mail Server Senkronizasyonu
 Ulusal Siber Olaylara Müdahale Merkezi (USOM) Türkiye özelinde kendi yaptığı çalışmalar neticesinde veya ihbar yolu ile tespit ettiği zararlı (malware) yazılım yayan veya oltalama saldırısında (phising) bulunan IP adreslerini ve Domain isimlerini www.usom.gov.tr üzerinden yayınlamaktadır.
 
 USOM Zararlı Bağlantı Listesi [https://www.usom.gov.tr/rss/zararli-baglanti.rss]() adresinde RSS standartlarında XML formatında ayrıca yayınlanmaktadır. 
