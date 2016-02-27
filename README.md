@@ -3,10 +3,10 @@ Ulusal Siber Olaylara Müdahale Merkezi (USOM) Türkiye özelinde kendi yaptığ
 
 USOM Zararlı Bağlantı Listesi [https://www.usom.gov.tr/rss/zararli-baglanti.rss]() adresinde RSS standartlarında XML formatında ayrıca yayınlanmaktadır. 
 
-Bu uygulama USOM'un yayınladığı bu zararlı listesini [http://www.exim.org/](Exim Mail Sunucusu) Domain ve IP Black List dosyası ile eşleştirerek yeni tespit edilmiş olan zararlı yazılımlardan ve Phising saldırılarını korunmanızı sağlar.
+Usomsync uygulaması USOM'un yayınladığı bu zararlı listesini [Exim Mail Sunucusu](http://www.exim.org/)  konfigürasyonuna ekleyerek yeni tespit edilmiş olan zararlı yazılımlardan ve phising saldırılarından korunmanızı sağlar.
 
 ## Gereksinimler
-1. Exim Mail Server ([http://www.exim.org/]())
+1. Exim Mail Server ([^](http://www.exim.org/))
 
 ## Parametreler
 **-url:** USOM Zararlı Bağlantı Listesi'nin web adresini belirleyen parametre. Varsayılan olarak https://www.usom.gov.tr/rss/zararli-baglanti.rss değerini alır.
@@ -16,13 +16,12 @@ Bu uygulama USOM'un yayınladığı bu zararlı listesini [http://www.exim.org/]
 **-ip:** Uygulamanın zararlı bulunan IP Adreslerinin hangi dosyaya kayıtedileceğini belirleyen parametre. Varsayılan olarak /etc/spammeripblocks değerini alır.
 
 ## Kullanım
-`usomsync -url=https://www.usom.gov.tr/rss/zararli-baglanti.rss -d=/etc/blockeddomains -ip=/etc/spammeripblocks`
+`/bin/usomsync -url=https://www.usom.gov.tr/rss/zararli-baglanti.rss -d=/etc/blockeddomains -ip=/etc/spammeripblocks`
 
 ## Kurulum
-1. usomsync binary dosyasını [https://github.com/c1982/usomsync/releases]() adresinden temin edin.
-2. Sunucunuzun _/bin_ klasörü altına kopyalayın (/bin/usomsync).
-3. `chmod 754 usomsync` komutu ile uygulamayı çalışır hale getirin.
-4. Cronjob'a ekleyin. Bunun için;
+1. Wget ile uygulamayı sunucunuza yükleyin `wget https://github.com/c1982/usomsync/releases/download/v1.0/usomsync -O /bin/usomsync`
+2. `chmod 754 /bin/usomsync` komutu ile uygulamayı çalışır hale getirin.
+3. Uygulamayı crontab görevlerine günlük olarak ekleyin.
 	1. `crontab -e` ile zamanlanmış görevler dosyasını açın.
 	2. dosyanın son satırına `@daily /bin/usomsync` ibaresini ekleyin.
 	3. /etc/blockeddomains dosyası yok ise `touch /etc/blockeddomains` ile oluşturun.
