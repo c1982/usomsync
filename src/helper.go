@@ -126,7 +126,7 @@ func scannerToLines(s *bufio.Scanner) (lines []string) {
 
 //AppendNewLinesToFile add new lines to text file
 func AppendNewLinesToFile(filePath string, lines []string) error {
-	file, err := os.OpenFile(filePath, os.O_APPEND, 0666)
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 
 	if err != nil {
 		return err

@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 )
 
@@ -16,11 +15,7 @@ func main() {
 	flag.StringVar(&USOM_URL, "url", "https://www.usom.gov.tr/rss/zararli-baglanti.rss", "-url=https://www.usom.gov.tr/rss/zararli-baglanti.rss")
 	flag.StringVar(&SPAMMERIPBLOCKS, "ip", "/etc/spammeripblocks", "-ip=/etc/spammeripblocks")
 	flag.StringVar(&SPAMMERDOMAINS, "d", "/etc/blockeddomains", "-d=/etc/blockeddomains")
-
-	fmt.Println(SPAMMERIPBLOCKS)
-	fmt.Println(SPAMMERDOMAINS)
-
-	fmt.Println("tail:", flag.Args())
+	flag.Parse()
 
 	rsstext, err := GetXmlData(USOM_URL)
 	checkError(err)
