@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"strings"
 )
 
@@ -48,4 +49,17 @@ func (r *Rss) ToDomainList() []string {
 	}
 
 	return list
+}
+
+func (r *Rss) captureIpv4(text string) string {
+
+	rg := regexp.MustCompile(`(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))`)
+
+	matches := rg.FindStringSubmatch(text)
+
+	if len(matches) == 0 {
+		return nil
+	} else {
+		return matches[0]
+	}
 }
