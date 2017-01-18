@@ -45,13 +45,25 @@ usomsync çalıştıktan sonra hemen arkasından aşağıdaki scripti çalışt�
 ```bash
 #!/bin/bash
 sed -i -e '/\#USOM KURALLARI/,$d' /etc/postfix/sndr
-rm /tmp/blockeddomains.tmp /tmp/blockeddomains /tmp/spammeripblocks && touch /tmp/blockeddomains.tmp /tmp/blockeddomains /tmp/spammeripblocks
+rm /tmp/blockeddomains.tmp /tmp/blockeddomains /tmp/spammeripblocks /tmp/blockeddomains.bak /tmp/spammeripblocks.bak && touch /tmp/blockeddomains.tmp /tmp/blockeddomains /tmp/spammeripblocks
 /bin/usomsync -url=https://www.usom.gov.tr/rss/zararli-baglanti.rss -d=/tmp/blockeddomains.tmp -ip=/tmp/spammeripblocks
 cat /tmp/blockeddomains.tmp|grep -v "/">/tmp/blockeddomains
+cat /tmp/blockeddomains>/tmp/restricted-list && cat /tmp/spammeripblocks>>/tmp/restricted-list
+sed -i -e 's/^/\/ip firewall address-list add address\=/' /tmp/restricted-list && sed -i -e 's/$/ list=restricted/' /tmp/restricted-list
+sort /tmp/restricted-list | uniq > /var/www/usom-restricted-list.txt
 sed -i -e 's/^/\//' /tmp/blockeddomains && sed -i.bak 's/$/\/REJECT USOM/' /tmp/blockeddomains && sed -i '1s/^/\#USOM KURALLARI\n/' /tmp/blockeddomains
 sed -i.bak 's/$/\ REJECT USOM/' /tmp/spammeripblocks
 cat /tmp/spammeripblocks>/etc/postfix/client_ips_custom
 postmap /etc/postfix/client_ips_custom
 cat /tmp/blockeddomains>>/etc/postfix/sndr
 /etc/init.d/postfix restart
+```
+
+##  Mikrotik için address-list çıktısı
+
+```bash
+cat /tmp/blockeddomains>/tmp/restricted-list && cat /tmp/spammeripblocks>>/tmp/restricted-list
+sed -i -e 's/^/\/ip firewall address-list add address\=/' /tmp/restricted-list && sed -i -e 's/$/ list=restricted/' /tmp/restricted-list
+cp /tmp/restricted-list /var/www/usom-restricted-list.txt
+sort /tmp/restricted-list | uniq > /var/www/usom-restricted-list.txt
 ```
