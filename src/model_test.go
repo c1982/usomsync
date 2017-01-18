@@ -29,6 +29,24 @@ var xmlString = `<?xml version='1.0' encoding='UTF-8' ?>
 		<pubDate>Thu, 25 Feb 2016 14:57:25 +0000</pubDate>
 		<description>SOME</description>
 		</item>
+		<item>
+		<title>Oltalama - http://108.167.137.37/eonlineg</title>
+		<link>http://108.167.137.37/eonlineg</link>
+		<pubDate>Tue, 19 Jul 2016 18:17:24 +0000</pubDate>
+		<description>İHBAR</description>
+		</item>
+		<item>
+		<title>Bankacılık - Oltalama - ddnmamozagreb.com/paymo/</title>
+		<link>ddnmamozagreb.com/paymo/</link>
+		<pubDate>Mon, 30 Nov 2015 16:15:27 +0000</pubDate>
+		<description>İHBAR</description>
+		</item>
+		<item>
+		<title>Bankacılık - Oltalama - ddnmamozagreb.com/paymo/</title>
+		<link>http://www.maeb.com/dynamo/</link>
+		<pubDate>Mon, 30 Nov 2015 16:15:27 +0000</pubDate>
+		<description>İHBAR</description>
+		</item>
 		</channel>
 	</rss>`
 
@@ -40,7 +58,7 @@ func TestXMLUnmarshal(t *testing.T) {
 		t.Error("Title is nil")
 	}
 
-	if len(rss.RssChannel.Items) != 3 {
+	if len(rss.RssChannel.Items) != 6 {
 		t.Errorf("Item lenght is %v", len(rss.RssChannel.Items))
 	}
 
@@ -53,8 +71,8 @@ func TestLinkToStringArray(t *testing.T) {
 	rss := DeserializeXml(xmlString)
 
 	domains := rss.ToDomainList()
-	t.Log(len(domains))
 
+	t.Logf("Domain List: %v", len(domains))
 	for _, it := range domains {
 		t.Log(it)
 	}
@@ -64,8 +82,8 @@ func TestLinkToStringArray(t *testing.T) {
 	}
 
 	iplist := rss.ToIPList()
-	t.Log(len(iplist))
 
+	t.Logf("IP List: %v", len(iplist))
 	for _, it := range iplist {
 		t.Log(it)
 	}

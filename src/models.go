@@ -2,7 +2,6 @@ package main
 
 import (
 	"regexp"
-	"strings"
 )
 
 type Rss struct {
@@ -29,8 +28,10 @@ func (r *Rss) ToIPList() []string {
 	list := []string{}
 
 	for _, item := range r.RssChannel.Items {
-		if isValidIp(item.Link) {
-			list = append(list, item.Link)
+		currentLink := r.extractData(item.Link)
+
+		if currentLink != "" && isValidIp(currentLink) {
+			list = append(list, currentLink)
 		}
 	}
 
@@ -41,25 +42,25 @@ func (r *Rss) ToDomainList() []string {
 	list := []string{}
 
 	for _, item := range r.RssChannel.Items {
-		if !isValidIp(item.Link) {
-			if !strings.HasSuffix(item.Link, "http://") {
-				list = append(list, item.Link)
-			}
+		currentLink := r.extractData(item.Link)
+
+		if currentLink != "" && !isValidIp(currentLink) {
+			list = append(list, currentLink)
 		}
 	}
 
 	return list
 }
 
-func (r *Rss) captureIpv4(text string) string {
+func (r *Rss) extractData(text string) string {
 
-	rg := regexp.MustCompile(`(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))`)
+	rg := regexp.MustCompile(`^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)`)
 
 	matches := rg.FindStringSubmatch(text)
 
 	if len(matches) == 0 {
-		return nil
+		return ""
 	} else {
-		return matches[0]
+		return matches[1]
 	}
 }
